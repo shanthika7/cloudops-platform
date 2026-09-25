@@ -36,5 +36,13 @@ jobs:
       - name: Build Application Jar
         run: mvn -f application/bank-app/pom.xml clean package
 
+      - name: Run Trivy Vulnerability Scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: bank-app:ci
+          format: table
+          exit-code: 0
+          severity: CRITICAL,HIGH
+
       - name: Build Docker Image
         run: docker build -t bank-app:ci application/bank-app
