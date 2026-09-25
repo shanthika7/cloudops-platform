@@ -1,0 +1,40 @@
+name: CloudOps CI
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: bankappdb
+        ports:
+          - 3306:3306
+
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build Application Jar
+        run: mvn -f application/bank-app/pom.xml clean package
+
+      - name: Build Docker Image
+        run: docker build -t bank-app:ci application/bank-app
