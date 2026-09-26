@@ -37,7 +37,7 @@ jobs:
         run: mvn -f application/bank-app/pom.xml clean package
 
       - name: Run Trivy Vulnerability Scanner
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: bank-app:ci
           format: table
