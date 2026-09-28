@@ -14,6 +14,15 @@ jobs:
     name: Analyze Java Code
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: bankappdb
+        ports:
+          - 3306:3306
+
     permissions:
       actions: read
       contents: read
