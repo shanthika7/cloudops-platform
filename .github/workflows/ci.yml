@@ -58,4 +58,12 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Tag Docker Image
+        run: |
+          docker tag bank-app:ci 668216280078.dkr.ecr.us-east-1.amazonaws.com/bank-app:latest
+
+      - name: Push Docker Image To ECR
+        run: |
+          docker push 668216280078.dkr.ecr.us-east-1.amazonaws.com/bank-app:latest
+
 
