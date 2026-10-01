@@ -61,9 +61,10 @@ jobs:
       - name: Tag Docker Image
         run: |
           docker tag bank-app:ci 668216280078.dkr.ecr.us-east-1.amazonaws.com/bank-app:latest
+          docker tag bank-app:ci 668216280078.dkr.ecr.us-east-1.amazonaws.com/bank-app:${{ github.sha }}
 
       - name: Push Docker Image To ECR
         run: |
           docker push 668216280078.dkr.ecr.us-east-1.amazonaws.com/bank-app:latest
-
+          docker push 668216280078.dkr.ecr.us-east-1.amazonaws.com/bank-app:${{ github.sha }}
 
