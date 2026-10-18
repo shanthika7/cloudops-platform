@@ -147,7 +147,7 @@ jobs:
     needs:
       - build
       - test
-      - code-quality
+      - sonarqube
 
     steps:
       - name: Checkout Source Code
