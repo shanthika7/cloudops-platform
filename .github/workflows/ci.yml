@@ -130,19 +130,11 @@ jobs:
             -Dsonar.host.url="$SONAR_HOST_URL" \
             -Dsonar.token="$SONAR_TOKEN"
 
-      # Temporary diagnostic step.
-      # We need the exact scanner metadata location before enforcing
-      # the SonarQube Quality Gate.
-      - name: Locate SonarQube Metadata
-        run: |
-          echo "Searching for SonarQube report-task.txt..."
-          find . -name "report-task.txt" -print
-
       - name: SonarQube Quality Gate
         uses: sonarsource/sonarqube-quality-gate-action@master
         timeout-minutes: 10
         with:
-          scanMetadataReportFile: application/bank-app/.scannerwork/report-task.txt
+          scanMetadataReportFile: application/bank-app/target/sonar/report-task.txt
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
