@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "bank_app" {
-  name = var.ecr_repository_name
+  name         = var.ecr_repository_name
+  force_delete = true
 }
 
 resource "aws_ecr_lifecycle_policy" "bank_app_lifecycle" {
