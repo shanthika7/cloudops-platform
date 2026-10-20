@@ -1,127 +1,162 @@
-**CI/CD Pipeline for Spring Boot Application using GitHub Actions, Docker & AWS ECS**
+# CI/CD Pipeline for a Spring Boot Banking Application on AWS
 
-**Project Overview**
+## Terraform • GitHub Actions • Docker • SonarQube • Trivy • Amazon ECR • ECS/Fargate • ALB • CloudWatch
+
+### Project Overview 
 This project demonstrates an end-to-end CI/CD pipeline for a Java Spring Boot banking application deployed on AWS.
 
-The project focuses on DevOps practices by automating application build, testing, code-quality analysis, container security scanning, containerization, image publishing, deployment, and health verification.
+The pipeline automates the complete delivery workflow:
 
-Infrastructure is provisioned using Terraform, while GitHub Actions manages the CI/CD workflow.
+- Application build
+- Unit testing
+- Code-quality analysis
+- Container image creation
+- Container vulnerability scanning
+- Image publication to Amazon ECR
+- Deployment to Amazon ECS/Fargate
+- Post-deployment health verification
+  
+The AWS infrastructure is provisioned using Terraform, while GitHub Actions manages the CI/CD workflow.
 
-**Architecture Flow**
+The banking application is used as the workload so that the project can focus primarily on DevOps, cloud infrastructure, security, automation, and deployment practices.
+
+### Architecture
+CloudOps Platform Architecture
+Architecture Flow
+
+## Architecture Flow
+
+```text
 Developer
-   ↓
+    ↓
 GitHub Repository
-   ↓
+    ↓
 GitHub Actions
-   ↓
+    ↓
 Maven Build
-   ↓
+    ↓
 Unit Tests
-   ↓
+    ↓
 SonarQube Quality Gate
-   ↓
+    ↓
 Docker Image Build
-   ↓
+    ↓
 Trivy Security Scan
-   ↓
+    ↓
 Amazon ECR
-   ↓
+    ↓
 Amazon ECS / Fargate
-   ↓
+    ↓
 Application Load Balancer
-   ↓
+    ↓
 Spring Boot Banking Application
+```
 
-**AWS Application Flow**
-User / Browser
-      ↓
-Application Load Balancer :80
-      ↓
-Target Group /health
-      ↓
-Amazon ECS / Fargate :8080
-      ↓
-Spring Boot Banking Application
-      ↓
-MySQL
+### Tech Stack
 
-**Tech Stack**
-  Application: Java 17, Spring Boot
-  Build Tool: Maven
-  CI/CD: GitHub Actions
-  Infrastructure as Code: Terraform
-  Containerization: Docker
-  Cloud: AWS
-  Container Registry: Amazon ECR
-  Container Platform: Amazon ECS / Fargate
-  Load Balancer: Application Load Balancer
-  Code Quality: SonarQube
-  Security Scanning: Trivy
-  Secrets Management: AWS Systems Manager Parameter Store
-  Monitoring: Amazon CloudWatch
-  Database: MySQL
+- **Application**: Java 17, Spring Boot 3.5.16
+- **Build Tool**: Maven
+- **Testing**: JUnit
+- **CI/CD**: GitHub Actions
+- **Infrastructure as Code**: Terraform
+- **Containerization**: Docker
+- **Cloud Platform**: AWS
+- **Container Registry**: Amazon ECR
+- **Container Deployment**: Amazon ECS/Fargate
+- **Load Balancing**: Application Load Balancer
+- **Code Quality**: SonarQube
+- **Container Security**: Trivy
+- **Secrets Management**: AWS Systems Manager Parameter Store
+- **Monitoring and Logging**: Amazon CloudWatch
+- **Database**: MySQL
 
-**  CI/CD Pipeline**
-The GitHub Actions pipeline is divided into the following stages:
+### CI/CD Pipeline
+The GitHub Actions workflow is organized into the following stages:
 
-Build – Compile and package the Spring Boot application using Maven
-Unit Test – Execute automated application tests
-SonarQube Quality Gate – Perform static code analysis and enforce the Quality Gate
-Build Container – Build the Docker image
-Trivy Security Scan – Scan the container image for critical vulnerabilities
-Publish to ECR – Push the validated image to Amazon ECR
-Deploy to ECS – Trigger a new Amazon ECS/Fargate deployment
-Verify Deployment – Wait for ECS stability and verify application health through the ALB
+1. **Build**
+Compiles and packages the Spring Boot application using Maven.
 
-**AWS Deployment**
+2. **Unit Test**
+Runs automated application tests.
+
+3. **SonarQube Quality Gate**
+Performs static code analysis and validates the configured Quality Gate.
+
+4. **Build Container**
+Builds the Docker image for the banking application.
+
+5. **Trivy Security Scan**
+Scans the container image for critical vulnerabilities.
+
+6. **Publish to ECR**
+Publishes the validated Docker image to Amazon ECR.
+
+7. **Deploy to ECS**
+Triggers a new Amazon ECS/Fargate service deployment.
+
+8. **Verify Deployment**
+Waits for ECS service stability and validates the application health endpoint through the ALB.
+
+### AWS Deployment
 The application infrastructure is provisioned using Terraform.
 
 The AWS environment includes:
 
-Amazon VPC
-Two public subnets
-Internet Gateway
-Route tables
-Security Groups
-Application Load Balancer
-ALB Target Group
-Amazon ECR
-Amazon ECS/Fargate
-IAM roles
-AWS Systems Manager Parameter Store
-Amazon CloudWatch
-Docker images are stored in Amazon ECR and deployed as an Amazon ECS/Fargate service.
+- Amazon VPC
+- Two public subnets
+- Internet Gateway
+- Route tables
+- Security Groups
+- Application Load Balancer
+- ALB Target Group
+- Amazon ECR
+- Amazon ECS/Fargate
+- IAM roles and policies
+- AWS Systems Manager Parameter Store
+- Amazon CloudWatch
+- Docker images are stored in Amazon ECR and deployed as an Amazon ECS/Fargate service.
 
-The Application Load Balancer routes incoming traffic to the Spring Boot application running on port 8080.
+The Application Load Balancer receives HTTP traffic on port 80 and forwards it to the Spring Boot application running on port 8080.
 
-Application health is verified using:
-
+Application health is verified through:
 /health
+The ECS service uses a health-check grace period so that the Spring Boot application and MySQL database can complete startup before task health is evaluated.
 
-
-**Code Quality & Security**
-SonarQube
+### Code Quality
+**SonarQube**
 SonarQube is integrated into the GitHub Actions pipeline for automated code-quality analysis.
 
-The SonarQube Quality Gate must pass before the pipeline proceeds to container publication and deployment.
+The pipeline must pass the configured SonarQube Quality Gate before proceeding to later delivery stages.
 
-Trivy
+SonarQube Community Build is hosted on a Terraform-managed Amazon EC2 instance.
+
+### Container Security
+**Trivy**
 Trivy scans the Docker image for CRITICAL vulnerabilities before the image is published to Amazon ECR.
 
-The security scan acts as a CI/CD gate, allowing approved exceptions while continuing to fail the pipeline for new unapproved critical findings.
+The scan is configured as a CI/CD security gate. New unapproved critical findings can fail the pipeline and prevent image publication and deployment.
 
-**Monitoring**
-Amazon CloudWatch is used for application logging and ECS monitoring.
+### Monitoring and Logging
+Amazon CloudWatch provides the monitoring and logging foundation for the deployed application.
 
 Current monitoring includes:
 
-Application logs
-ECS CPU utilization
-ECS memory utilization
-Application logs are available through the CloudWatch log group:
-
+- ECS application logs
+- CPU utilization
+- Memory utilization
+- ECS task and service visibility
+  
+Application logs are centralized under the CloudWatch log group:
 /ecs/bank-app
 
-**Project Status**
-Core CI/CD and AWS ECS deployment workflow is implemented and operational.
+## Screenshots
+
+**1. Banking Application Running through AWS ALB**
+
+
+
+
+
+
+
 
