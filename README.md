@@ -153,6 +153,13 @@ Application logs are centralized under the CloudWatch log group:
 
 **1. Banking Application Running through AWS ALB**
 
+<img width="1912" height="940" alt="image" src="https://github.com/user-attachments/assets/bfeefd28-9a49-4834-82cb-f3c28c0fbc3f" />
+
+**2. GitHub Actions CI/CD Pipeline**
+
+
+
+
 
 
 
