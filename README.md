@@ -152,10 +152,64 @@ Application logs are centralized under the CloudWatch log group:
 ## Screenshots
 
 **1. Banking Application Running through AWS ALB**
-
-<img width="1912" height="940" alt="image" src="https://github.com/user-attachments/assets/bfeefd28-9a49-4834-82cb-f3c28c0fbc3f" />
+<img width="1912" height="940" alt="image" src="https://github.com/user-attachments/assets/bfeefd28-9a49-4834-82cb-f3c28c0fbc3f" /> 
 
 **2. GitHub Actions CI/CD Pipeline**
+<img width="1904" height="842" alt="image" src="https://github.com/user-attachments/assets/a4b4e4bf-c85f-4998-8565-3972a2c150b1" /> 
+
+**3. Amazon ECS/Fargate Deployment**
+<img width="1880" height="752" alt="image" src="https://github.com/user-attachments/assets/cf595ad3-5992-484b-8c93-5e34e7682000" /> 
+
+**4. Application Load Balancer Health**
+<img width="1916" height="760" alt="image" src="https://github.com/user-attachments/assets/a3c023c1-9ed0-4ea5-a2bd-014a4f774456" />
+
+ **5. CloudWatch ECS Monitoring**
+<img width="1887" height="761" alt="image" src="https://github.com/user-attachments/assets/ccf3f484-3f03-4f77-973e-afdbb1e9ccb0" />
+
+
+## Project Structure
+
+```text
+CloudOps-Platform/
+├── .github/
+│   └── workflows/
+│       └── ci.yml
+├── application/
+│   └── bank-app/
+│       ├── src/
+│       ├── Dockerfile
+│       └── pom.xml
+├── infrastructure/
+│   └── terraform/
+├── docs/
+├── .trivyignore
+└── README.md
+```
+
+### Key Highlights
+ - Automated end-to-end CI/CD using GitHub Actions
+- Provisioned AWS infrastructure using Terraform
+- Containerized the Spring Boot banking application using Docker
+- Integrated SonarQube Quality Gate into CI
+- Integrated Trivy container vulnerability scanning
+- Published validated container images to Amazon ECR
+- Automated deployment to Amazon ECS/Fargate
+- Implemented Application Load Balancer health checks
+- Managed application secrets using AWS Systems Manager Parameter Store
+- Monitored ECS CPU and memory utilization using Amazon CloudWatch
+
+
+### Notes
+- This project focuses on DevOps automation, Infrastructure as Code, container security, CI/CD, and AWS ECS deployment.
+- The Spring Boot banking application is used as the workload to demonstrate the complete build-to-deployment lifecycle.
+- AWS resources are managed through Terraform to support repeatable deployment.
+
+### Author
+Shanthika Shet <br>
+Github: https://github.com/shanthika7
+
+
+
 
 
 
